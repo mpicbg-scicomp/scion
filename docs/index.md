@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+Scion
+=======
 
-You can use the [editor on GitHub](https://github.com/mpicbg-scicomp/scion/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
+Scion is a file transfer tool based on electron user interface backed by ```rsync``` runtime. You can install the binary version from **releases** section.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Getting started
 
-### Markdown
+**Scion** can be used in Windows, Linux and MacOSX. To get started, check out [the installation instructions in the documentation](setup.md).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Usage examples
 
-```markdown
-Syntax highlighted code block
+Scion can be used for any kinds of data transfer projects. 
 
-# Header 1
-## Header 2
-### Header 3
+You can find a [list of real-world examples](examples.md) in the documentation.
 
-- Bulleted
-- List
+## Help and Support
 
-1. Numbered
-2. List
+We are always happy to help out with your use-cases or any other questions you might have. You can ask a question via email, scicomp@mpi-cbg.de or signal an issue on [GitHub](https://github.com/mpicbg-scicomp/scion/).
 
-**Bold** and _Italic_ and `Code` text
+## Features
 
-[Link](url) and ![Image](src)
-```
+* File transfer over rsync
+* Fail-safe transfer
+* Multi-user support
+* Realtime monitoring source folder
+* Synchronization folder if the content is changed
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+## Licensing
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/mpicbg-scicomp/scion/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Scion is licensed under the BSD 3-Clause "New" or "Revised" License. See [LICENSE](LICENSE) for the full license text.
