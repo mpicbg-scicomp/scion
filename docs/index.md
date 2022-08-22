@@ -25,6 +25,10 @@ We are always happy to help out with your use-cases or any other questions you m
 * Realtime monitoring source folder
 * Synchronization folder if the content is changed
 
+## Contributions
+
+We are looking forward to contributions. If you want to contribute this project, please read our [Dev](dev.md) documentation first.
+
 ## Licensing
 
 Scion is licensed under the BSD 3-Clause "New" or "Revised" License. See [LICENSE](LICENSE) for the full license text.
