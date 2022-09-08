@@ -1,5 +1,10 @@
 # scion
 
+### 1.0.3
+* Easy project spaces browsing
+* Transmission resume
+* Better console window
+
 ### 1.0.2
 * Stand-alone application
 * Better UI for browsing project spaces
