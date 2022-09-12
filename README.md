@@ -1,5 +1,8 @@
 # scion
 
+### 1.1.0
+* Re-transfer when files are added or changed while transferring
+
 ### 1.0.3
 * Easy project spaces browsing
 * Transmission resume
