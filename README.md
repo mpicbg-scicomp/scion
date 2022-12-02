@@ -1,5 +1,8 @@
 # scion
 
+### 1.1.1
+* Fixed a bug of not collecting all the projects
+
 ### 1.1.0
 * Re-transfer when files are added or changed while transferring
 
