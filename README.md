@@ -3,6 +3,7 @@
 ### 1.1.5
 * Handle the file locking issue in rsync process
 * Browse the folder having spaces
+* Support <kbd>Ctrl</kbd> + <kbd>C</kbd> for copying the text in console panel
 
 ### 1.1.4
 * The fileserver URL is fixed
