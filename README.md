@@ -1,5 +1,9 @@
 # scion
 
+### 1.1.5
+* Handle the file locking issue in rsync process
+* Browse the folder having spaces
+
 ### 1.1.4
 * The fileserver URL is fixed
 * The browse window content is initialized before authentication
