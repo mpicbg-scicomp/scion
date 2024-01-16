@@ -1,4 +1,7 @@
 # scion
+### 1.1.6
+* Default permission is changed to 2770 for directories and 770 for files
+* Focus on the text input box when new folder creating dialog box opens
 
 ### 1.1.5
 * Handle the file locking issue in rsync process
