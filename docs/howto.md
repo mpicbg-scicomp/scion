@@ -26,3 +26,5 @@ Click on **Upload** and select the local folder from which folder you want to tr
 
 <img src="img/logout.png" width="250">
 
+
+##### Note: all the data in the Monitoring Folder will be transferred automatically to the Project Path, except the _temp folder which is created by CellSens.
