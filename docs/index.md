@@ -5,7 +5,7 @@ Scion is a file transfer tool based on electron user interface backed by ```rsyn
 
 ## Getting started
 
-**Scion** can be used in Windows, Linux and MacOSX. To get started, check out [the installation instructions in the documentation](setup.md).
+**Scion** can be used in Windows, Linux and MacOSX. To get started, check out [how to use scion](howto.md) and [the installation instructions in the documentation](setup.md) for development.
 
 ## Usage examples
 
