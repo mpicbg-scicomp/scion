@@ -1,7 +1,7 @@
 ## How to use Scion
 
 ### 1. Open scion software
-The fileserver path will be shown under **Server** as fileserver-ssh.mpi-cbg.de.
+The fileserver path will be shown under **Server** as *fileserver-ssh.mpi-cbg.de*.
 
 
 ### 2. Write your credentials to get access to the fileserver
