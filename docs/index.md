@@ -15,7 +15,7 @@ In case of Linux and MacOSX, the higher version than 3.0.0 `rsync` should be ins
 
 ### Intallation
 
-To install the software, please, visit our facility project repository, https://github.com/mpicbg-scicomp/scion.
+To install the software, please, visit our facility project repository, [https://github.com/mpicbg-scicomp/scion](https://github.com/mpicbg-scicomp/scion).
 
 There is the [releases section](https://github.com/mpicbg-scicomp/scion/releases) in the [github repository](https://github.com/mpicbg-scicomp/scion). Each version contains multiple assets because Scion supports Windows (>= Windows 7), Linux (>= Ubuntu 14.04, Fedora 24, Debian 8) and MacOSX (>= 10.11).
 
