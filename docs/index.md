@@ -19,9 +19,11 @@ To install the software, please, visit our facility project repository, https://
 
 There is the [releases section](https://github.com/mpicbg-scicomp/scion/releases) in the [github repository](https://github.com/mpicbg-scicomp/scion). Each version contains multiple assets because Scion supports Windows (>= Windows 7), Linux (>= Ubuntu 14.04, Fedora 24, Debian 8) and MacOSX (>= 10.11).
 
-* Windows: Download scion-Setup-x.x.x.exe
-* Linux: Download scion-x.x.x.AppImage
-* Mac: Download scion-x.x.x.dmg
+* Windows: Download **scion-Setup-x.x.x.exe**
+* Linux: Download **scion-x.x.x.AppImage**
+* Mac: Download **scion-x.x.x.dmg**
+
+<img src="img/assets.png" width="400">
 
 ## Usage examples
 
