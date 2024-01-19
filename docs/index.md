@@ -23,7 +23,7 @@ There is the [releases section](https://github.com/mpicbg-scicomp/scion/releases
 * Linux: Download **scion-x.x.x.AppImage**
 * Mac: Download **scion-x.x.x.dmg**
 
-<img src="img/assets.png" width="400">
+<img src="img/assets.png" width="600">
 
 ## Usage examples
 
