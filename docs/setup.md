@@ -24,10 +24,10 @@ npm run lint
 ## Windows
 
 #### Setup Steps
-In order to get the list of $Shares from the fileserver, an administrator should provide id/password in Terminal
+In order to get the list of $Shares from the fileserver, In order to get the list of $Shares from the fileserver, the below commands need to be run.
 
 ```bash
-# Type the below command and give ID/PW 
+# Type the below command
 net user \\server\IPC$
 
 # When you get the successful message, 
