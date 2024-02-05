@@ -22,7 +22,12 @@ Click on **Upload** and select the local folder from which folder you want to tr
 <img src="img/monitor.png" width="600">
 
 
-### 5. Don’t forget to log out at the end of your session
+### 5. "Stop transfer"
+You can stop transfer during synchronizing the folder at any time. Please open the folder with **Upload** or drag-and-drop the folder **Upload** button if you want to upload/monitor the acquisition folder.
+
+
+
+### 6. Don’t forget to log out at the end of your session
 
 <img src="img/logout.png" width="250">
 
