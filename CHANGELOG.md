@@ -1,4 +1,33 @@
 =======
+### 1.2.7
+* Rsync daemon life time is changed to one day
+* Client has a function to check if the rsync daemon is running, otherwise it will relaunch it
+
+### 1.2.6
+* Increase the rsync server lifetime to three days
+* Add statistic measures for collection
+
+### 1.2.5
+* Incremental option is changed to "--append-verify" to avoid file corruption
+
+### 1.2.4
+* Support user mode installation. It does not require any administration priviledge in Windows
+
+### 1.2.3
+* Hot-fix for 32bit version
+
+### 1.2.2
+* Support Windows 7 32bit
+
+### 1.2.1
+* Control daemon process lifecycle: the daemon process terminates after 1 day
+* Sorting is based on alphabet
+
+### 1.2.0
+* This is the pre-release version
+* Big update for the user interface
+* Improve the filename checking logic
+
 ### 1.1.6
 * Default permission is changed to 2770 for directories and 770 for files
 * Focus on the text input box when new folder creating dialog box opens
