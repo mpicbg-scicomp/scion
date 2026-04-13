@@ -4,19 +4,23 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:9080
+# serve with hot reload (Vite dev server + Electron)
+npm run dev:vite
+
+# serve with hot reload (Webpack dev server + Electron, legacy)
 npm run dev
 
 # build electron application for production
-npm run build
+npm run build:vite
 
-# run unit & end-to-end tests
-npm test
+# run unit tests (Vitest)
+npm run test:vitest:ci
 
+# run unit tests with UI
+npm run test:vitest:ui
 
-# lint all JS/Vue component files in `src/`
+# lint all JS/Vue/TS files in `src/`
 npm run lint
-
 ```
 
 ---
@@ -24,7 +28,7 @@ npm run lint
 ## Windows
 
 #### Setup Steps
-In order to get the list of $Shares from the fileserver, In order to get the list of $Shares from the fileserver, the below commands need to be run.
+In order to get the list of $Shares from the fileserver, the below commands need to be run. 
 
 ```bash
 # Type the below command
@@ -38,7 +42,7 @@ net user \\server\IPC$
 net view server
 ```
 
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[ef811ba](https://github.com/SimulatedGREG/electron-vue/tree/ef811ba974d696ee965da747315f20a034ebc590) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+This project was originally generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[ef811ba](https://github.com/SimulatedGREG/electron-vue/tree/ef811ba974d696ee965da747315f20a034ebc590) using [vue-cli](https://github.com/vuejs/vue-cli). It has since been migrated to Vue 3 Composition API with TypeScript.
 
 
 ## How to embed code-signing certificate in CI
@@ -70,13 +74,3 @@ https://felixrieseberg.com/codesigning-electron-apps-in-ci/
        $env:WINDOWS_CERTIFICATE_FILE = $filename
    }
    ```
-
-## smbmap for collecting samba shares
-
-https://github.com/ShawnDEvans/smbmap
-
-* smbmap as windows binary: https://github.com/ShawnDEvans/smbmap/issues/7
-
-```bash
-sudo pyinstaller smbmap.py -n smbmap --onefile --noconfirm --clean
-```

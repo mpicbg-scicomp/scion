@@ -9,11 +9,11 @@ Scion is a file transfer tool based on electron user interface backed by ```rsyn
 
 ### Requirements
 
-MacOSX from 10.11.x, Windows 7 and Linux (Ubuntu, Fedora, Debian).
+macOS 10.11+, Windows 7+, or Linux (Ubuntu 14.04+, Fedora 24+, Debian 8+).
 
-In case of Linux and MacOSX, the higher version than 3.0.0 `rsync` should be installed.
+`rsync` version 3.0.0 or higher is required (pre-installed on macOS and most Linux distributions).
 
-### Intallation
+### Installation
 
 To install the software, please, visit our facility project repository, [https://github.com/mpicbg-scicomp/scion](https://github.com/mpicbg-scicomp/scion).
 
@@ -25,9 +25,19 @@ There is the [releases section](https://github.com/mpicbg-scicomp/scion/releases
 
 <img src="img/assets.png" width="600">
 
+### Screenshots
+
+**Light mode:**
+
+<img src="img/monitor.png" width="600">
+
+**Dark mode:**
+
+<img src="img/monitor-dark.png" width="600">
+
 ## Usage examples
 
-Scion can be used for any kinds of data transfer projects. 
+Scion can be used for any kinds of data transfer projects.
 
 You can find a [list of real-world examples](examples.md) in the documentation.
 
@@ -38,14 +48,18 @@ We are always happy to help out with your use-cases or any other questions you m
 ## Features
 
 * File transfer over rsync
-* Fail-safe transfer
+* Fail-safe transfer with stop/resume capability
 * Multi-user support
-* Realtime monitoring source folder
-* Synchronization folder if the content is changed
+* Multi-server support (select the target server at login)
+* Realtime monitoring of source folder
+* Automatic re-synchronization when folder content changes
+* Transfer resume per server (unfinished transfers are tracked per server and prompted on next login)
+* Dark mode with system, light, and dark theme options (persisted across sessions)
+* Enter key to connect from the password field
 
 ## Contributions
 
-We are looking forward to contributions. If you want to contribute this project, please read our [Dev](dev.md) documentation first.
+We welcome contributions. If you want to contribute to this project, please read our [Dev](dev.md) documentation first.
 
 ## Licensing
 
