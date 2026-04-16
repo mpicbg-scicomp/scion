@@ -2,7 +2,10 @@
 
 ### SSH Host Key Verification (First-Time Setup)
 
-When using Scion for the first time, you **must** manually SSH into the target server from a terminal before Scion can connect. This is because SSH requires you to accept the server's host key on first contact, and Scion cannot handle this interactive prompt.
+When using Scion for the first time, you **must** manually SSH into the target server from a terminal before Scion can connect. This is required for two reasons:
+
+1. **SSH host key verification** -- SSH requires you to accept the server's host key on first contact, and Scion cannot handle this interactive prompt.
+2. **User home folder creation** -- your home directory on the server is created automatically on your first SSH login. Without it, Scion will not be able to browse or transfer files to the server.
 
 #### macOS / Linux
 
