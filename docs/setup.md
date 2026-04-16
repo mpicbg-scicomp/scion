@@ -25,23 +25,6 @@ npm run lint
 
 ---
 
-## Windows
-
-#### Setup Steps
-In order to get the list of $Shares from the fileserver, the below commands need to be run. 
-
-```bash
-# Type the below command
-net user \\server\IPC$
-
-# When you get the successful message, 
-# the server program is able to get the list of share$ 
-# from the samba file server
-
-# You can check it with the below command
-net view server
-```
-
 This project was originally generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[ef811ba](https://github.com/SimulatedGREG/electron-vue/tree/ef811ba974d696ee965da747315f20a034ebc590) using [vue-cli](https://github.com/vuejs/vue-cli). It has since been migrated to Vue 3 Composition API with TypeScript.
 
 

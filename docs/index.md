@@ -45,6 +45,8 @@ You can find a [list of real-world examples](examples.md) in the documentation.
 
 We are always happy to help out with your use-cases or any other questions you might have. You can ask a question via email, scicomp@mpi-cbg.de or signal an issue on [GitHub](https://github.com/mpicbg-scicomp/scion/).
 
+If you are experiencing issues, check the [troubleshooting guide](troubleshoot.md).
+
 ## Features
 
 * File transfer over rsync
