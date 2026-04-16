@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scion — Scientific Data Transfer Tool</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f8f9fc;
+    --surface: #ffffff;
+    --text: #1a1e2c;
+    --text2: #5c6478;
+    --accent: #3da67a;
+    --accent2: #3574b8;
+    --border: #dde1e8;
+    --slide-w: 960px;
+    --slide-h: 540px;
+  }
+
+  html { font-family: 'Inter', -apple-system, sans-serif; font-size: 16px; background: #0d0f14; }
+
+  /* --- Slide container --- */
+  .deck {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
+    scroll-behavior: smooth;
+  }
+
+  .slide {
+    scroll-snap-align: start;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card {
+    width: var(--slide-w);
+    height: var(--slide-h);
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+    padding: 48px 56px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Accent bar */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  /* --- Typography --- */
+  h1 { font-size: 32px; font-weight: 800; color: var(--text); line-height: 1.2; }
+  h2 { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+  h3 { font-size: 15px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  p, li { font-size: 15px; color: var(--text2); line-height: 1.7; }
+  li { margin-bottom: 6px; }
+  ul { padding-left: 20px; }
+  strong { color: var(--text); font-weight: 600; }
+  code { background: #eef0f4; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-family: 'SF Mono', 'Menlo', monospace; }
+
+  /* --- Fullscreen mode --- */
+  html.fullscreen { background: var(--surface); }
+  html.fullscreen .deck { scroll-snap-type: none; }
+  html.fullscreen .slide { height: 100vh; }
+  html.fullscreen .card {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 48px 72px;
+  }
+  html.fullscreen .card::before { border-radius: 0; }
+  html.fullscreen .nav-hint { display: none; }
+  html.fullscreen .fullscreen-hint { display: block; }
+
+  .fullscreen-hint { display: none; position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; color: rgba(255,255,255,0.3); z-index: 10; }
+
+  /* --- Laser pointer --- */
+  .laser {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ff2222 0%, #ff2222 40%, rgba(255,34,34,0.4) 70%, transparent 100%);
+    box-shadow: 0 0 8px 3px rgba(255,34,34,0.5), 0 0 20px 6px rgba(255,34,34,0.2);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    display: none;
+  }
+  .laser.active { display: block; }
+  html.laser-on { cursor: none; }
+  html.laser-on .card { cursor: none; }
+
+  /* --- Slide number --- */
+  .num {
+    position: absolute;
+    bottom: 20px; right: 28px;
+    font-size: 12px; font-weight: 500;
+    color: var(--border);
+  }
+
+  /* --- Title slide --- */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .title-slide .logo { width: 280px; margin-bottom: 16px; }
+  .title-slide .subtitle { font-size: 18px; color: var(--text2); margin-top: 8px; font-weight: 400; }
+  .title-slide .meta { font-size: 13px; color: var(--border); margin-top: 24px; }
+
+  /* --- Two column --- */
+  .cols { display: flex; gap: 36px; flex: 1; min-height: 0; }
+  .cols > .col { flex: 1; display: flex; flex-direction: column; }
+
+  /* --- Screenshot --- */
+  .screenshot {
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    border: 1px solid var(--border);
+    max-width: 100%;
+    object-fit: contain;
+  }
+  .screenshot-pair {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    align-items: center;
+  }
+  .screenshot-pair img {
+    flex: 1;
+    max-height: 360px;
+    object-fit: contain;
+  }
+  .screenshot-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text2);
+    text-align: center;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* --- Feature grid --- */
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 28px;
+    flex: 1;
+  }
+  .feature {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .feature .icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .feature .label { font-size: 14px; font-weight: 600; color: var(--text); }
+  .feature .desc { font-size: 12.5px; color: var(--text2); line-height: 1.5; }
+
+  /* --- Architecture table --- */
+  .arch-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .arch-table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--accent);
+    padding: 6px 10px;
+    border-bottom: 2px solid var(--accent);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .arch-table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+  }
+  .arch-table td:first-child {
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 12px;
+  }
+
+  /* --- Flow diagram --- */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .flow-step {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 100px;
+  }
+  .flow-step small { display: block; font-weight: 400; color: var(--text2); font-size: 10.5px; margin-top: 2px; }
+  .flow-arrow { color: var(--accent); font-size: 18px; font-weight: 700; }
+
+  /* --- Keyboard nav hint --- */
+  .nav-hint {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    z-index: 10;
+  }
+
+  /* --- Print --- */
+  @media print {
+    .deck { overflow: visible; height: auto; }
+    .slide { height: auto; page-break-after: always; }
+    .nav-hint { display: none; }
+    html { background: #fff; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- ==================== SLIDE 1: TITLE ==================== -->
+<div class="slide">
+  <div class="card title-slide">
+    <img class="logo" src="img/scion-logo.png" alt="Scion">
+    <h1>Scion</h1>
+    <div class="subtitle">Automated Scientific Data Transfer</div>
+    <p style="margin-top: 12px; font-size: 14px;">Reliable, real-time file synchronization for research facilities</p>
+    <div class="meta">Scientific Computing Facility &middot; MPI-CBG &middot; v1.2.12</div>
+    <span class="num">1</span>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 2: PROBLEM & SOLUTION ==================== -->
+<div class="slide">
+  <div class="card">
+    <h3>The challenge</h3>
+    <h2>Moving research data shouldn't be hard</h2>
+    <div class="cols">
+      <div class="col">
+        <p style="margin-bottom: 16px;">Microscopy instruments generate large datasets that need to reach project storage <strong>reliably</strong> and <strong>automatically</strong>.</p>
+        <p style="margin-bottom: 16px;"><strong>Common pain points:</strong></p>
+        <ul>
+          <li>Manual copy is error-prone and slow</li>
+          <li>Transfers fail silently mid-way</li>
+          <li>No resume after interruption</li>
+          <li>Users forget to transfer new files</li>
+          <li>No visibility into transfer progress</li>
+        </ul>
+      </div>
+      <div class="col">
+        <p style="margin-bottom: 16px;"><strong>Scion solves this</strong> with a desktop app that:</p>
+        <ul>
+          <li><strong>Monitors</strong> a local folder for changes</li>
+          <li><strong>Transfers</strong> automatically via rsync</li>
+          <li><strong>Resumes</strong> interrupted transfers</li>
+          <li><strong>Verifies</strong> data integrity (checksums)</li>
+          <li><strong>Notifies</strong> via real-time console output</li>
+        </ul>
+      </div>
+    </div>
+    <span class="num">2</span>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: FEATURES ==================== -->
+<div class="slide">
+  <div class="card">
+    <h3>Capabilities</h3>
+    <h2>Key Features</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="icon">&#x21C4;</div>
+        <div><div class="label">Rsync-powered transfer</div><div class="desc">Delta sync &mdash; only changed bytes are sent. Handles large files efficiently.</div></div>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x25B6;</div>
+        <div><div class="label">Auto-monitoring</div><div class="desc">Watches the source folder in real time. New or changed files transfer instantly.</div></div>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x21BA;</div>
+        <div><div class="label">Resume &amp; retry</div><div class="desc">Interrupted transfers resume where they left off. Per-server transaction tracking.</div></div>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x2694;</div>
+        <div><div class="label">Multi-server</div><div class="desc">Select target server at login. Each server has independent project paths.</div></div>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x263E;</div>
+        <div><div class="label">Dark mode</div><div class="desc">System / light / dark theme with OS preference detection. Persisted across sessions.</div></div>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x2318;</div>
+        <div><div class="label">Cross-platform</div><div class="desc">macOS, Windows 7+, Linux. Built with Electron for native desktop experience.</div></div>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x1F4C1;</div>
+        <div><div class="label">Folder browser</div><div class="desc">Browse remote project directories. Create new folders directly from the app.</div></div>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x2328;</div>
+        <div><div class="label">Console output</div><div class="desc">Live xterm terminal showing rsync progress, errors, and transfer statistics.</div></div>
+      </div>
+    </div>
+    <span class="num">3</span>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: SCREENSHOTS ==================== -->
+<div class="slide">
+  <div class="card">
+    <h3>User Interface</h3>
+    <h2>Light &amp; Dark Mode</h2>
+    <div class="screenshot-pair">
+      <div>
+        <img class="screenshot" src="img/monitor.png" alt="Light mode">
+        <div class="screenshot-label">Light</div>
+      </div>
+      <div>
+        <img class="screenshot" src="img/monitor-dark.png" alt="Dark mode">
+        <div class="screenshot-label">Dark</div>
+      </div>
+    </div>
+    <span class="num">4</span>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: WORKFLOW ==================== -->
+<div class="slide">
+  <div class="card">
+    <h3>How it works</h3>
+    <h2>Transfer Workflow</h2>
+    <div class="flow">
+      <div class="flow-step">Select Server<small>fileserver / korok</small></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">Login<small>LDAP credentials</small></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">Choose Dest<small>Browse remote folders</small></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">Select Source<small>Local monitoring folder</small></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step" style="border-color: var(--accent); background: rgba(61,166,122,0.06);">Auto-sync<small>rsync transfers data</small></div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+      <p style="margin-bottom: 14px;"><strong>Under the hood:</strong></p>
+      <ul>
+        <li><strong>Authentication:</strong> LDAP login &rarr; SSH tunnel &rarr; rsync daemon started on server</li>
+        <li><strong>File watching:</strong> Chokidar monitors the source folder for adds, changes, and new subdirectories</li>
+        <li><strong>Transfer:</strong> rsync with <code>--partial</code> for resume, <code>--append-verify</code> for incremental large files</li>
+        <li><strong>Transaction log:</strong> SQLite database tracks each transfer (start, resume, complete, cancel) per server</li>
+        <li><strong>Stop:</strong> Process group kill (<code>-pid</code>) reliably terminates rsync and all children</li>
+      </ul>
+    </div>
+    <span class="num">5</span>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: ARCHITECTURE ==================== -->
+<div class="slide">
+  <div class="card">
+    <h3>Technical overview</h3>
+    <h2>Architecture (v1.2.12)</h2>
+    <div class="cols">
+      <div class="col">
+        <p style="margin-bottom: 12px; font-size: 13px; color: var(--text2);">Vue 3 Composition API with TypeScript. <code>LandingPage.vue</code> orchestrates 11 composables:</p>
+        <table class="arch-table">
+          <tr><th>Composable</th><th>Role</th></tr>
+          <tr><td>useAuth</td><td>LDAP login, connection state</td></tr>
+          <tr><td>useRsync</td><td>Process state, stop transfer</td></tr>
+          <tr><td>useDatabase</td><td>SQLite transaction tracking</td></tr>
+          <tr><td>useFileWatcher</td><td>Chokidar file monitoring</td></tr>
+          <tr><td>useTransfer</td><td>Transfer orchestration</td></tr>
+          <tr><td>useLayout</td><td>GoldenLayout + xterm</td></tr>
+          <tr><td>useTheme</td><td>Dark/light/system toggle</td></tr>
+          <tr><td>useAppState</td><td>Electron-store persistence</td></tr>
+        </table>
+        <p style="margin-top: 8px; font-size: 11px; color: var(--text2);">+ useRemoteFolders, useServer, useNetworkDrive</p>
+      </div>
+      <div class="col">
+        <p style="margin-bottom: 12px; font-weight: 600;">Tech Stack</p>
+        <ul style="font-size: 13px;">
+          <li><strong>Frontend:</strong> Vue 3, TypeScript, GoldenLayout</li>
+          <li><strong>Desktop:</strong> Electron, @electron/remote</li>
+          <li><strong>Transfer:</strong> rsync (via child_process)</li>
+          <li><strong>Auth:</strong> ldapjs (LDAP), ssh2 (SSH)</li>
+          <li><strong>Storage:</strong> SQLite (transactions), electron-store (prefs)</li>
+          <li><strong>Terminal:</strong> @xterm/xterm</li>
+          <li><strong>Styling:</strong> CSS custom properties (38 tokens)</li>
+          <li><strong>Testing:</strong> Vitest (17 tests)</li>
+          <li><strong>Build:</strong> Webpack + electron-builder</li>
+        </ul>
+      </div>
+    </div>
+    <span class="num">6</span>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: WHAT'S NEW ==================== -->
+<div class="slide">
+  <div class="card">
+    <h3>Release highlights</h3>
+    <h2>What's New in v1.2.12</h2>
+    <div class="cols">
+      <div class="col">
+        <p style="font-weight:600; margin-bottom:10px;">Features</p>
+        <ul style="font-size:13px;">
+          <li><strong>Dark mode</strong> &mdash; system/light/dark with OS detection</li>
+          <li><strong>Multi-server</strong> &mdash; server dropdown at login</li>
+          <li><strong>Composition API</strong> &mdash; 1500-line monolith &rarr; 11 composables</li>
+          <li><strong>TypeScript</strong> &mdash; full migration</li>
+          <li><strong>Enter to connect</strong> &mdash; press Enter in password field</li>
+        </ul>
+        <p style="font-weight:600; margin-bottom:10px; margin-top:16px;">Bug Fixes</p>
+        <ul style="font-size:13px;">
+          <li><strong>Stop transfer works</strong> &mdash; fixed shell PID bug</li>
+          <li><strong>No runtime errors on stop</strong> &mdash; resolve vs reject</li>
+          <li><strong>DB handle closed</strong> &mdash; fixed SQLite race</li>
+          <li><strong>Rsync port range</strong> &mdash; fixed limit [50000, 50100]</li>
+        </ul>
+      </div>
+      <div class="col">
+        <p style="font-weight:600; margin-bottom:10px;">UI Improvements</p>
+        <ul style="font-size:13px;">
+          <li>Distinct tinted backgrounds per panel</li>
+          <li>Color-coded GoldenLayout tabs</li>
+          <li>Modernized buttons, inputs, panels</li>
+          <li>Custom scrollbar styling</li>
+          <li>Transparent dark-mode logo</li>
+        </ul>
+        <p style="font-weight:600; margin-bottom:10px; margin-top:16px;">Maintenance</p>
+        <ul style="font-size:13px;">
+          <li>Updated all dependencies</li>
+          <li>Added Vitest test infrastructure</li>
+          <li>Removed unused SMB module</li>
+        </ul>
+      </div>
+    </div>
+    <span class="num">7</span>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: CLOSING ==================== -->
+<div class="slide">
+  <div class="card title-slide">
+    <img class="logo" src="img/scion-logo.png" alt="Scion" style="width: 200px;">
+    <h1 style="font-size: 28px;">Thank you</h1>
+    <p style="margin-top: 12px; font-size: 15px; color: var(--text2);">
+      <strong>Documentation:</strong> <code>mpicbg-scicomp.github.io/scion</code>
+    </p>
+    <p style="margin-top: 6px; font-size: 15px; color: var(--text2);">
+      <strong>Repository:</strong> <code>git.mpi-cbg.de/scicomp/scidev_team/scion</code>
+    </p>
+    <p style="margin-top: 6px; font-size: 15px; color: var(--text2);">
+      <strong>Contact:</strong> scicomp@mpi-cbg.de
+    </p>
+    <div class="meta" style="margin-top: 32px;">Scientific Computing Facility &middot; MPI-CBG Dresden</div>
+    <span class="num">8</span>
+  </div>
+</div>
+
+</div>
+
+<div class="laser" id="laser"></div>
+<div class="nav-hint">Scroll or arrow keys to navigate &middot; <b>F</b> fullscreen &middot; <b>L</b> laser pointer</div>
+<div class="fullscreen-hint">Press <b>Esc</b> to exit fullscreen</div>
+
+<script>
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  const deck = document.querySelector('.deck');
+  const slideH = window.innerHeight;
+
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+    e.preventDefault();
+    deck.scrollBy({ top: slideH, behavior: 'smooth' });
+  } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    deck.scrollBy({ top: -slideH, behavior: 'smooth' });
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    deck.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    deck.scrollTo({ top: deck.scrollHeight, behavior: 'smooth' });
+  }
+
+  // Fullscreen toggle
+  if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        document.documentElement.classList.add('fullscreen');
+      });
+    }
+  }
+  if (e.key === 'Escape' && document.fullscreenElement) {
+    // Browser handles exiting fullscreen on Escape automatically,
+    // but we catch the class toggle via the event below
+  }
+});
+
+// Sync class when exiting fullscreen via Escape or other means
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.classList.remove('fullscreen');
+  }
+});
+
+// Laser pointer
+const laser = document.getElementById('laser');
+let laserOn = false;
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'l' || e.key === 'L') {
+    laserOn = !laserOn;
+    laser.classList.toggle('active', laserOn);
+    document.documentElement.classList.toggle('laser-on', laserOn);
+  }
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (laserOn) {
+    laser.style.left = e.clientX + 'px';
+    laser.style.top = e.clientY + 'px';
+  }
+});
+</script>
+</body>
+</html>

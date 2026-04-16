@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | default: site.title | default: "Scion" }} – Scion Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="{{ '/' | relative_url }}" class="header-brand">
+        <img src="{{ '/img/scion-logo.png' | relative_url }}" alt="Scion logo">
+        <span class="brand-text">
+          <span class="brand-name">Scion</span>
+          <span class="brand-tagline">File Transfer Application powered by rsync</span>
+        </span>
+      </a>
+      <div class="header-actions">
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme" aria-label="Toggle dark mode"></button>
+        <a class="btn-github" href="https://github.com/mpicbg-scicomp/scion">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a>
+      <a href="{{ '/howto' | relative_url }}" {% if page.url contains 'howto' %}class="active"{% endif %}>How to Use</a>
+      <a href="{{ '/troubleshoot' | relative_url }}" {% if page.url contains 'troubleshoot' %}class="active"{% endif %}>Troubleshooting</a>
+      <a href="{{ '/pipeline' | relative_url }}" {% if page.url contains 'pipeline' %}class="active"{% endif %}>Pipeline</a>
+      <a href="{{ '/setup' | relative_url }}" {% if page.url contains 'setup' %}class="active"{% endif %}>Setup</a>
+      <a href="{{ '/dev' | relative_url }}" {% if page.url contains 'dev' %}class="active"{% endif %}>Development</a>
+    </div>
+  </nav>
+
+  <main class="site-content">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      Scion &copy; {{ 'now' | date: "%Y" }} <a href="https://www.mpi-cbg.de/research-groups/scientific-computing-facility">Scientific Computing Facility</a>, MPI-CBG
+      &middot; Licensed under BSD 3-Clause
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = 'scion-docs-theme';
+      var toggle = document.getElementById('theme-toggle');
+      var html = document.documentElement;
+
+      function applyTheme(theme) {
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem(STORAGE_KEY, theme);
+      }
+
+      // Restore saved preference or follow OS
+      var saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        applyTheme(saved);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        applyTheme('dark');
+      }
+
+      // Follow OS changes when no explicit preference
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem(STORAGE_KEY)) {
+          applyTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+
+      toggle.addEventListener('click', function () {
+        var current = html.getAttribute('data-theme') || 'light';
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    })();
+  </script>
+
+</body>
+</html>
