@@ -58,7 +58,7 @@ npm run test:vitest
 
 ```shell
 # Release with a specific version
-npm run release -- --release-as 1.2.12
+npm run release -- --release-as 1.2.13
 ```
 
 ### Commit message convention
@@ -81,4 +81,16 @@ git commit -a -m"<type>[optional scope]: <description>"
 
 References:
 * ["How to generate Changelog using Conventional Commits"](https://medium.com/jobtome-engineering/how-to-generate-changelog-using-conventional-commits-10be40f5826c)
+
+### Rsync process management
+
+All rsync path resolution is handled by `getRsyncExe()` in `lib/rsync/process.js`:
+
+- **macOS**: resolves to `/opt/homebrew/bin/rsync` (arm64) or `/usr/local/bin/rsync` (x64)
+- **Windows**: resolves to `rsync.exe` and adds the bundled `utils/windows64/` (or `windows32/`) directory to PATH automatically
+- **Linux**: uses the system `rsync`
+
+The rsync child process is spawned with `detached: true` on all platforms so the process group can be killed cleanly on stop/logout.
+
+`smbmap` has been removed -- remote folder listing is now handled entirely via SSH.
 
