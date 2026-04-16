@@ -52,37 +52,100 @@
     </div>
   </footer>
 
-  <script>
-    (function () {
-      var STORAGE_KEY = 'scion-docs-theme';
-      var toggle = document.getElementById('theme-toggle');
-      var html = document.documentElement;
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
-      function applyTheme(theme) {
-        html.setAttribute('data-theme', theme);
-        localStorage.setItem(STORAGE_KEY, theme);
-      }
+    var STORAGE_KEY = 'scion-docs-theme';
+    var toggle = document.getElementById('theme-toggle');
+    var html = document.documentElement;
 
-      // Restore saved preference or follow OS
-      var saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        applyTheme(saved);
-      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        applyTheme('dark');
-      }
+    function currentTheme() {
+      return html.getAttribute('data-theme') || 'light';
+    }
 
-      // Follow OS changes when no explicit preference
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-        if (!localStorage.getItem(STORAGE_KEY)) {
-          applyTheme(e.matches ? 'dark' : 'light');
+    function mermaidTheme() {
+      return currentTheme() === 'dark' ? 'dark' : 'default';
+    }
+
+    // Convert ```mermaid code blocks into <div class="mermaid"> so mermaid can render them.
+    // Jekyll outputs them as <pre><code class="language-mermaid">...</code></pre>.
+    function prepareMermaidBlocks() {
+      document.querySelectorAll('pre > code.language-mermaid').forEach(function (codeEl) {
+        var pre = codeEl.parentElement;
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = codeEl.textContent;
+        pre.parentElement.replaceChild(div, pre);
+      });
+    }
+
+    async function renderMermaid() {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: mermaidTheme(),
+        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+        securityLevel: 'loose'
+      });
+      await mermaid.run({ querySelector: '.mermaid' });
+    }
+
+    async function rerenderMermaid() {
+      // Reset rendered diagrams back to source text so mermaid can re-render with new theme
+      document.querySelectorAll('.mermaid').forEach(function (el) {
+        if (el.getAttribute('data-mermaid-src')) {
+          el.innerHTML = '';
+          el.textContent = el.getAttribute('data-mermaid-src');
+          el.removeAttribute('data-processed');
         }
       });
-
-      toggle.addEventListener('click', function () {
-        var current = html.getAttribute('data-theme') || 'light';
-        applyTheme(current === 'dark' ? 'light' : 'dark');
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: mermaidTheme(),
+        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+        securityLevel: 'loose'
       });
-    })();
+      await mermaid.run({ querySelector: '.mermaid' });
+    }
+
+    // Stash original source text before first render
+    function stashSources() {
+      document.querySelectorAll('.mermaid').forEach(function (el) {
+        if (!el.getAttribute('data-mermaid-src')) {
+          el.setAttribute('data-mermaid-src', el.textContent);
+        }
+      });
+    }
+
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem(STORAGE_KEY, theme);
+    }
+
+    // Restore saved preference or follow OS
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      applyTheme(saved);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      applyTheme('dark');
+    }
+
+    // Follow OS changes when no explicit preference
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        applyTheme(e.matches ? 'dark' : 'light');
+        rerenderMermaid();
+      }
+    });
+
+    toggle.addEventListener('click', function () {
+      applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+      rerenderMermaid();
+    });
+
+    // Initial render
+    prepareMermaidBlocks();
+    stashSources();
+    await renderMermaid();
   </script>
 
 </body>
