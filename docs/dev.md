@@ -82,16 +82,3 @@ git commit -a -m"<type>[optional scope]: <description>"
 References:
 * ["How to generate Changelog using Conventional Commits"](https://medium.com/jobtome-engineering/how-to-generate-changelog-using-conventional-commits-10be40f5826c)
 
-
-### Windows issues 
-
-The issue was that our previous fix changed shell: true to detached: true globally, but on Windows:
-
-1. detached: true spawns a new console window and can cause rsync.exe to fail immediately (exit with non-zero code, hitting the
-   "unknown reason" default case)
-2. Without shell: true, Cygwin-based rsync.exe can't parse the shell-quoted exclude patterns or cygdrive paths properly
-3. taskkill /f /t already kills the full process tree on Windows, so the original shell: true PID issue doesn't apply there
-
-The fix: platform-conditional spawn options — shell: true on Windows (where taskkill handles kill correctly), detached: true on
-Unix/macOS (where process group kill via -pid is needed). Arguments are also conditionally quoted for each platform.
-
