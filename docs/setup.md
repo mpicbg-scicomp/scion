@@ -25,6 +25,14 @@ npm run lint
 
 ---
 
+## Windows rsync
+
+On Windows, rsync and the required Cygwin DLLs are **bundled with the application** — no manual installation is needed. The binaries are included for both 64-bit and 32-bit Windows in the `utils/` directory and are packaged into the installer automatically.
+
+The bundled rsync is located at runtime in the app's `resources/utils/windows64/` (or `windows32/`) directory. Scion adds this to the PATH automatically.
+
+---
+
 This project was originally generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[ef811ba](https://github.com/SimulatedGREG/electron-vue/tree/ef811ba974d696ee965da747315f20a034ebc590) using [vue-cli](https://github.com/vuejs/vue-cli). It has since been migrated to Vue 3 Composition API with TypeScript.
 
 

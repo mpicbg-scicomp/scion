@@ -11,7 +11,7 @@ Scion is a file transfer tool based on electron user interface backed by ```rsyn
 
 macOS 10.11+, Windows 7+, or Linux (Ubuntu 14.04+, Fedora 24+, Debian 8+).
 
-`rsync` version 3.0.0 or higher is required (pre-installed on macOS and most Linux distributions).
+`rsync` version 3.0.0 or higher is required (pre-installed on macOS and most Linux distributions). On Windows, rsync is bundled with the application — no separate installation needed.
 
 ### Installation
 
