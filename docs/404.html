@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting…</title>
+  <link rel="canonical" href="https://repo-pages.mpi-cbg.de/scion/">
+  <script>
+    (function () {
+      var target = 'https://repo-pages.mpi-cbg.de' + window.location.pathname + window.location.search + window.location.hash;
+      window.location.replace(target);
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting to <a id="canonical-link" href="https://repo-pages.mpi-cbg.de/scion/">https://repo-pages.mpi-cbg.de/scion/</a>…</p>
+  <script>
+    var link = document.getElementById('canonical-link');
+    var target = 'https://repo-pages.mpi-cbg.de' + window.location.pathname + window.location.search + window.location.hash;
+    link.href = target;
+    link.textContent = target;
+  </script>
+</body>
+</html>
